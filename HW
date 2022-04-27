@@ -1,0 +1,102 @@
+//Create an interface for a simple FRC Command (include init, execute, isFinished, end)
+
+//Make 2 classes that implement your FRC Command interface (for example: RunDrivetrain, RunIndexer, ShootBall, RunClimber)
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello world!");
+  }
+}
+
+public interface Command {
+    public void execute();
+
+    public boolean isFinished();
+
+    public void end(boolean interrupted);
+
+    public static void main(String[] args) {
+        UseDrivetrain myCommand = new UseDrivetrain(() -> {
+            return Math.random();
+        });
+
+        while(!myCommand.isFinished()){
+            myCommand.execute();
+        }
+        myCommand.end(false);
+    
+       RunIndexer runCommand = new RunIndexer(() -> {
+            return Math.random();
+        });
+
+        while(!myCommand.isFinished()){
+            runCommand.execute();
+        }
+        runCommand.end(false);
+
+      }
+     
+}
+
+public class RunIndexer implements Command {
+    public Consumer<Double> runMotor;
+    public Supplier<Double> motorPower;
+
+    private int countdown = 10;
+
+    public RunIndexer(Supplier<Double> motorPower){
+        this.runMotor = (power) -> {
+            System.out.println("Set drivetrain power to " + power);
+        };
+        this.motorPower = motorPower;
+    }
+
+    @Override
+    public void execute(){
+        this.runMotor.accept(this.motorPower.get());
+    }
+
+    @Override
+    public boolean isFinished(){
+        this.countdown--;
+        return this.countdown == 0;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        this.runMotor.accept(0.0);
+    }
+}
+
+public class UseDrivetrain implements Command {
+    public Consumer<Double> runMotor;
+    public Supplier<Double> motorPower;
+
+    private int countdown = 10;
+
+    public UseDrivetrain(Supplier<Double> motorPower){
+        this.runMotor = (power) -> {
+            System.out.println("Set drivetrain power to " + power);
+        };
+        this.motorPower = motorPower;
+    }
+
+    @Override
+    public void execute(){
+        this.runMotor.accept(this.motorPower.get());
+    }
+
+    @Override
+    public boolean isFinished(){
+        this.countdown--;
+        return this.countdown == 0;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        this.runMotor.accept(0.0);
+    }
+}
