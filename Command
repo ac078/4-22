@@ -1,0 +1,35 @@
+//Create an interface for a simple FRC Command (include init, execute, isFinished, end)
+
+//Make 2 classes that implement your FRC Command interface (for example: RunDrivetrain, RunIndexer, ShootBall, RunClimber)
+
+public interface Command {
+    public void execute();
+
+    public boolean isFinished();
+
+    public void end(boolean interrupted);
+
+    public static void main(String[] args) {
+        UseDrivetrain myCommand = new UseDrivetrain(() -> {
+            return Math.random();
+        });
+
+        while(!myCommand.isFinished()){
+            myCommand.execute();
+        }
+        myCommand.end(false);
+    
+       RunIndexer runCommand = new RunIndexer(() -> {
+            return Math.random();
+        });
+
+        while(!myCommand.isFinished()){
+            runCommand.execute();
+        }
+        runCommand.end(false);
+
+      }
+     
+
+    
+}
